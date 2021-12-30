@@ -11,6 +11,19 @@
    * "rush my-global-command --help".
    */
   "commands": [
+    {
+      "commandKind": "bulk",
+      "name": "lint",
+      "summary": "Runs lint rules in each project.",
+      "enableParallelism": true
+    },
+    {
+      "commandKind": "bulk",
+      "name": "test",
+      "summary": "Runs unit tests in each project.",
+      "enableParallelism": true,
+      "allowWarningsInSuccessfulBuild": true
+    },
     // {
     //   /**
     //    * (Required) Determines the type of custom command.

@@ -1,3 +1,3 @@
 export default (name = "World") => {
-    return `Hello ${name}`;
+  return `Hello ${name}`;
 };
