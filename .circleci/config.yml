@@ -3,17 +3,17 @@ version: 2.1
 commands:
   config_git:
     parameters:
-      email:
+      user_email:
         type: string
         default: tim@timothyreynolds.co.uk
-      name:
+      user_name:
         type: string
         default: Tim Reynolds (ci)
     steps: 
       - run:
           command: |
-            git config user.email "tim@mydomain.com"
-            git config user.name "My Name"
+            git config user.email <<parameters.user_email>>
+            git config user.name <<parameters.user_name>>
 
   checkout_and_restore_cache:
     steps:
