@@ -1,0 +1,19 @@
+{
+  "name": "@timreynolds/rush-circleci-example-package-a",
+  "entries": [
+    {
+      "version": "1.0.1",
+      "tag": "@timreynolds/rush-circleci-example-package-a_v1.0.1",
+      "date": "Thu, 30 Dec 2021 17:32:59 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Updated outputted message ",
+            "author": "Tim Reynolds <tim@timothyreynolds.co.uk>",
+            "commit": "4131cb346457bcae838b57471e27f9dc33642036"
+          }
+        ]
+      }
+    }
+  ]
+}
