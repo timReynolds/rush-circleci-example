@@ -9,7 +9,7 @@ jobs:
       - restore_cache:
           name: Restore Rush Global Cache
           keys:
-            - rush-global-v1-{{ checksum "rush.json" }}-{{ checksum ".node-version" }}
+            - rush-global-v1-{{ checksum "rush.json" }}
       - restore_cache:
           name: Restore Rush Local Cache
           keys:
@@ -24,7 +24,7 @@ jobs:
             node common/scripts/install-run-rush.js install
       - save_cache:
           name: Save Rush Global Cache
-          key: rush-global-v1-{{ checksum "rush.json" }}-{{ checksum ".node-version" }}
+          key: rush-global-v1-{{ checksum "rush.json" }}
           paths:
             - "/home/circleci/.rush"
       - persist_to_workspace:
@@ -53,7 +53,7 @@ jobs:
       - restore_cache:
           name: Restore Rush Global Cache
           keys:
-            - rush-global-v1-{{ checksum "rush.json" }}-{{ checksum ".node-version" }}
+            - rush-global-v1-{{ checksum "rush.json" }}
       - run:
           name: Build
           command: |
@@ -74,7 +74,7 @@ jobs:
       - restore_cache:
           name: Restore Rush Global Cache
           keys:
-            - rush-global-v1-{{ checksum "rush.json" }}-{{ checksum ".node-version" }}
+            - rush-global-v1-{{ checksum "rush.json" }}
       - run:
           name: Lint
           command: |
@@ -89,7 +89,7 @@ jobs:
       - restore_cache:
           name: Restore Rush Global Cache
           keys:
-            - rush-global-v1-{{ checksum "rush.json" }}-{{ checksum ".node-version" }}
+            - rush-global-v1-{{ checksum "rush.json" }}
       - run:
           name: Test
           command: |
