@@ -29,7 +29,7 @@ commands:
     steps:
       - run:
           name: <<parameters.command>>
-          command: node common/scripts/install-run_rush.js <<parameters.command>>
+          command: node common/scripts/install-run-rush.js <<parameters.command>>
 
 jobs:
   install:
