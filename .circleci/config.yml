@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   install:
     docker:
-      - image: cimg/node:14
+      - image: cimg/node:14.18
     steps:
       - checkout
       - restore_cache:
@@ -34,7 +34,7 @@ jobs:
 
   save-local-cache:
     docker: 
-      - image: cimg/node:14
+      - image: cimg/node:14.18
     steps:
       - attach_workspace:
           at: ./
@@ -46,7 +46,7 @@ jobs:
 
   build:
     docker: 
-      - image: cimg/node:14
+      - image: cimg/node:14.18
     steps:
       - attach_workspace:
           at: ./
@@ -67,7 +67,7 @@ jobs:
 
   lint:
     docker: 
-      - image: cimg/node:14
+      - image: cimg/node:14.18
     steps:
       - attach_workspace:
           at: ./
@@ -82,7 +82,7 @@ jobs:
 
   test:
     docker: 
-      - image: cimg/node:14
+      - image: cimg/node:14.18
     steps:
       - attach_workspace:
           at: ./
