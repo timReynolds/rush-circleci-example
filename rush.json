@@ -62,7 +62,7 @@
      * The default value is false to avoid legacy compatibility issues.
      * It is strongly recommended to set strictPeerDependencies=true.
      */
-    "strictPeerDependencies": true
+    "strictPeerDependencies": true,
 
     /**
      * Configures the strategy used to select versions during installation.
@@ -198,7 +198,7 @@
    * The approvals are tracked in two config files "browser-approved-packages.json"
    * and "nonbrowser-approved-packages.json".  See the Rush documentation for details.
    */
-  // "approvedPackagesPolicy": {
+  "approvedPackagesPolicy": {
   //   /**
   //    * The review categories allow you to say for example "This library is approved for usage
   //    * in prototypes, but not in production code."
@@ -225,7 +225,7 @@
   //    * are also approved.
   //    */
     "ignoredNpmScopes": ["@types"]
-  // },
+  },
 
   /**
    * If you use Git as your version control system, this section has some additional
@@ -287,12 +287,12 @@
      * your PR branch, and in this situation "rush change" will also automatically invoke "git fetch"
      * to retrieve the latest activity for the remote master branch.
      */
-    // "url": "https://github.com/microsoft/rush-example",
+    "url": "https://github.com/timReynolds/rush-circleci-example",
     /**
      * The default branch name. This tells "rush change" which remote branch to compare against.
      * The default value is "master"
      */
-    "defaultBranch": "main",
+    "defaultBranch": "main"
     /**
      * The default remote. This tells "rush change" which remote to compare against if the remote URL is
      * not set or if a remote matching the provided remote URL is not found.
@@ -441,7 +441,7 @@
     //   // "versionPolicyName": ""
     // },
     {
-      "packageName": "package-a",
+      "packageName": "@timreynolds/rush-circleci-example-package-a",
       "projectFolder": "packages/package-a",
       "reviewCategory": "production"
     }

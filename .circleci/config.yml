@@ -1,0 +1,130 @@
+version: 2.1
+
+commands:
+  checkout-and-restore-cache:
+    steps:
+      - checkout
+      - restore_cache:
+          name: Restore Rush Global Cache
+          keys:
+            - rush-global-v1-{{ checksum "rush.json" }}
+      - restore_cache:
+          name: Restore Rush Local Cache
+          keys:
+            - rush-local-v1-{{ checksum "common/config/rush/pnpm-lock.yaml" }}
+
+  attach-workspace-with-global-cache:
+    steps:
+      - attach_workspace:
+          at: ./
+      - restore_cache:
+          name: Restore Rush Global Cache
+          keys:
+            - rush-global-v1-{{ checksum "rush.json" }}
+  
+  run-rush:
+    parameters:
+      command:
+        type: string
+    steps:
+      - run:
+          name: <<parameters.command>>
+          command: node common/scripts/install-run-rush.js <<parameters.command>>
+
+jobs:
+  install:
+    docker:
+      - image: cimg/node:14.18
+    steps:
+      - checkout-and-restore-cache
+      - run-rush:
+          command: check
+      - run-rush:
+          command: install
+      - save_cache:
+          name: Save Rush Global Cache
+          key: rush-global-v1-{{ checksum "rush.json" }}
+          paths:
+            - "/home/circleci/.rush"
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - .
+
+  save-local-cache:
+    docker: 
+      - image: cimg/node:14.18
+    steps:
+      - attach_workspace:
+          at: ./
+      - save_cache:
+          name: Save Rush Local Cache
+          key: rush-local-v1-{{ checksum "common/config/rush/pnpm-lock.yaml" }}
+          paths:
+            - "./common/temp"
+
+  build:
+    docker: 
+      - image: cimg/node:14.18
+    steps:
+      - attach-workspace-with-global-cache
+      - run-rush:
+          command: rebuild
+      - persist_to_workspace:
+          root: ./
+          paths:
+            # shouldn't need to re-persist all the higher layer things, just wastes time
+            - ./packages/
+            - ./common/temp/rush-link.json
+
+  lint:
+    docker: 
+      - image: cimg/node:14.18
+    steps:
+      - attach-workspace-with-global-cache
+      - run-rush:
+          command: lint
+
+  verify-change:
+    docker: 
+      - image: cimg/node:14.18
+    steps:
+      - attach-workspace-with-global-cache
+      - run:
+          name: Add github.com to known hosts
+          command: | 
+            mkdir -p ~/.ssh
+            touch ~/.ssh/known_hosts
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
+      - run-rush:
+          command: change --verify
+
+  test:
+    docker: 
+      - image: cimg/node:14.18
+    steps:
+      - attach-workspace-with-global-cache
+      - run-rush:
+          command: test
+
+workflows:
+  version: 2
+
+  build-deploy:
+    jobs:
+      - install
+      - build:
+          requires:
+            - install
+      - lint:
+          requires:
+            - install
+      - test:
+          requires:
+            - install
+      - verify-change:
+          requires:
+            - install
+      - save-local-cache:
+          requires:
+            - install
