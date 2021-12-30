@@ -45,6 +45,15 @@ commands:
           name: <<parameters.command>>
           command: node common/scripts/install-run-rush.js <<parameters.command>>
 
+  add_github_to_known_hosts:
+    steps: 
+      - run:
+          name: Add github.com to known hosts
+          command: | 
+            mkdir -p ~/.ssh
+            touch ~/.ssh/known_hosts
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
+
 jobs:
   install:
     docker:
@@ -104,12 +113,7 @@ jobs:
       - image: cimg/node:14.18
     steps:
       - attach_workspace_with_global_cache
-      - run:
-          name: Add github.com to known hosts
-          command: | 
-            mkdir -p ~/.ssh
-            touch ~/.ssh/known_hosts
-            ssh-keyscan github.com >> ~/.ssh/known_hosts
+      - add_github_to_known_hosts
       - run_rush:
           command: change --verify
 
@@ -135,6 +139,7 @@ jobs:
     steps:
       - attach_workspace_with_global_cache
       - config_git
+      - add_github_to_known_hosts
       - run_rush:
           command: publish --add-commit-details --apply --target-branch main --publish
 
