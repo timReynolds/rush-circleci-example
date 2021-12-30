@@ -93,9 +93,8 @@ jobs:
       - run:
           name: Test
           command: |
-            repo-tools/scripts/run-rush-collect-logs.sh rush-logs node common/scripts/install-run-rush.js test-ci
-      
-
+            node common/scripts/install-run-rush.js test
+            
 workflows:
   version: 2
 
