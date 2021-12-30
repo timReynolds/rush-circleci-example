@@ -90,9 +90,12 @@ jobs:
       - image: cimg/node:14.18
     steps:
       - attach-workspace-with-global-cache
+      - run:
+          name: Add github.com to known hosts
+          command: ssh-keyscan github.com >> ~/.ssh/known_hosts
       - run-rush:
           command: change --verify
-          
+
   test:
     docker: 
       - image: cimg/node:14.18
