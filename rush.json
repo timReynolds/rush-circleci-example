@@ -443,7 +443,8 @@
     {
       "packageName": "@timreynolds/rush-circleci-example-package-a",
       "projectFolder": "packages/package-a",
-      "reviewCategory": "production"
+      "reviewCategory": "production",
+      "shouldPublish": true
     }
   ]
 }
