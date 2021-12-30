@@ -1,6 +1,20 @@
 version: 2.1
 
 commands:
+  config_git:
+    parameters:
+      email:
+        type: string
+        default: tim@timothyreynolds.co.uk
+      name:
+        type: string
+        default: Tim Reynolds (ci)
+    steps: 
+      - run:
+          command: |
+            git config user.email "tim@mydomain.com"
+            git config user.name "My Name"
+
   checkout_and_restore_cache:
     steps:
       - checkout
@@ -120,6 +134,7 @@ jobs:
       - image: cimg/node:14.18
     steps:
       - attach_workspace_with_global_cache
+      - config_git
       - run_rush:
           command: publish --add-commit-details --apply --target-branch main --publish
 
