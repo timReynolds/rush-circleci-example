@@ -21,6 +21,15 @@ commands:
           name: Restore Rush Global Cache
           keys:
             - rush-global-v1-{{ checksum "rush.json" }}
+  
+  run-rush:
+    parameters:
+      command:
+        type: string
+    steps:
+      - run:
+          name: <<parameters.command>>
+          command: node common/scripts/install-run-rush.js <<parameters.command>>
 
 jobs:
   install:
@@ -28,14 +37,10 @@ jobs:
       - image: cimg/node:14.18
     steps:
       - checkout-and-restore-cache
-      - run:
-          name: Check Dependencies
-          command: |
-             node common/scripts/install-run-rush.js check
-      - run:
-          name: Install Dependencies
-          command: |
-            node common/scripts/install-run-rush.js install
+      - run-rush:
+          command: check
+      - run-rush:
+          command: install
       - save_cache:
           name: Save Rush Global Cache
           key: rush-global-v1-{{ checksum "rush.json" }}
@@ -62,11 +67,9 @@ jobs:
     docker: 
       - image: cimg/node:14.18
     steps:
-      - attach-workspace-with-global-cache:
-      - run:
-          name: Build
-          command: |
-            node common/scripts/install-run-rush.js rebuild
+      - attach-workspace-with-global-cache
+      - run-rush:
+          command: rebuild
       - persist_to_workspace:
           root: ./
           paths:
@@ -78,21 +81,17 @@ jobs:
     docker: 
       - image: cimg/node:14.18
     steps:
-      - attach-workspace-with-global-cache:
-      - run:
-          name: Lint
-          command: |
-            node common/scripts/install-run-rush.js lint
+      - attach-workspace-with-global-cache
+      - run-rush:
+          command: lint
 
   test:
     docker: 
       - image: cimg/node:14.18
     steps:
-      - attach-workspace-with-global-cache:
-      - run:
-          name: Test
-          command: |
-            node common/scripts/install-run-rush.js test
+      - attach-workspace-with-global-cache
+      - run-rush:
+          command: test
 
 workflows:
   version: 2
