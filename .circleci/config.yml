@@ -121,7 +121,7 @@ jobs:
     steps:
       - attach_workspace_with_global_cache
       - run_rush:
-          command: publish --apply
+          command: publish --add-commit-details --apply --target-branch main --publish
 
 workflows:
   version: 2
