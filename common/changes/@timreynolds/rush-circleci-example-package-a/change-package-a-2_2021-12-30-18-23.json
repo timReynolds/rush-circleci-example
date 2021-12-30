@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@timreynolds/rush-circleci-example-package-a",
+      "comment": "Fixed package setup ",
+      "type": "patch"
+    }
+  ],
+  "packageName": "@timreynolds/rush-circleci-example-package-a"
+}
