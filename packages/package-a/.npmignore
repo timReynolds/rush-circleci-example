@@ -1,0 +1,6 @@
+.eslintrc
+src/
+.rush
+_tmp_*
+jest.config.js
+tsconfig.json
