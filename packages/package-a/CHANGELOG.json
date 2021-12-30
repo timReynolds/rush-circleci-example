@@ -2,6 +2,20 @@
   "name": "@timreynolds/rush-circleci-example-package-a",
   "entries": [
     {
+      "version": "1.0.2",
+      "tag": "@timreynolds/rush-circleci-example-package-a_v1.0.2",
+      "date": "Thu, 30 Dec 2021 18:26:33 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Fixed package setup ",
+            "author": "Tim Reynolds <tim@timothyreynolds.co.uk>",
+            "commit": "80c493e6c11a21456d0f357ad25c64a430c75cc7"
+          }
+        ]
+      }
+    },
+    {
       "version": "1.0.1",
       "tag": "@timreynolds/rush-circleci-example-package-a_v1.0.1",
       "date": "Thu, 30 Dec 2021 17:43:57 GMT",
