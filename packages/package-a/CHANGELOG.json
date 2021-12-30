@@ -1,0 +1,17 @@
+{
+  "name": "@timreynolds/rush-circleci-example-package-a",
+  "entries": [
+    {
+      "version": "1.0.1",
+      "tag": "@timreynolds/rush-circleci-example-package-a_v1.0.1",
+      "date": "Thu, 30 Dec 2021 16:40:05 GMT",
+      "comments": {
+        "patch": [
+          {
+            "comment": "Updated outputted message "
+          }
+        ]
+      }
+    }
+  ]
+}
