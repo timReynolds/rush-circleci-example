@@ -85,6 +85,14 @@ jobs:
       - run-rush:
           command: lint
 
+  verify-change:
+    docker: 
+      - image: cimg/node:14.18
+    steps:
+      - attach-workspace-with-global-cache
+      - run-rush:
+          command: change --verify
+          
   test:
     docker: 
       - image: cimg/node:14.18
@@ -107,7 +115,10 @@ workflows:
             - install
       - test:
           requires:
-            - build
+            - install
+      - verify-change:
+          requires:
+            - install
       - save-local-cache:
           requires:
             - install
