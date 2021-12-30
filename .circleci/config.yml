@@ -2,7 +2,8 @@ version: 2.1
 
 jobs:
   install:
-    image: cimg/node:14
+    docker:
+      - image: cimg/node:14
     steps:
       - checkout
       - restore_cache:
@@ -32,7 +33,8 @@ jobs:
             - .
 
   save-local-cache:
-    image: cimg/node:14
+    docker: 
+      - image: cimg/node:14
     steps:
       - attach_workspace:
           at: ./
@@ -43,7 +45,8 @@ jobs:
             - "./common/temp"
 
   build:
-    image: cimg/node:14
+    docker: 
+      - image: cimg/node:14
     steps:
       - attach_workspace:
           at: ./
@@ -63,7 +66,8 @@ jobs:
             - ./common/temp/rush-link.json
 
   lint:
-    image: cimg/node:14
+    docker: 
+      - image: cimg/node:14
     steps:
       - attach_workspace:
           at: ./
@@ -77,7 +81,7 @@ jobs:
             node common/scripts/install-run-rush.js lint
 
   test:
-    docker:
+    docker: 
       - image: cimg/node:14
     steps:
       - attach_workspace:
