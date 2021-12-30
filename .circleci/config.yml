@@ -8,7 +8,7 @@ commands:
         default: tim@timothyreynolds.co.uk
       user_name:
         type: string
-        default: Tim Reynolds (ci)
+        default: Tim Reynolds
     steps: 
       - run:
           command: |
