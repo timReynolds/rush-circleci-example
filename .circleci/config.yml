@@ -107,13 +107,21 @@ jobs:
       - run_rush:
           command: test
 
-  publish:
+  publish_dry_run:
     docker: 
       - image: cimg/node:14.18
     steps:
       - attach_workspace_with_global_cache
       - run_rush:
           command: publish
+
+  publish:
+    docker: 
+      - image: cimg/node:14.18
+    steps:
+      - attach_workspace_with_global_cache
+      - run_rush:
+          command: publish --apply
 
 workflows:
   version: 2
@@ -136,18 +144,25 @@ workflows:
       - save_local_cache:
           requires:
             - install
-      - approve_publish:
+      
+      # Main publishing flow
+      - publish_dry_run:
+          context: 
+            - npm
           requires:
             - save_local_cache
             - verify_change
             - test
             - lint 
             - build
-          type: approval
           filters:
             branches:
               only:
                 - main
+      - approve_publish:
+          requires:
+            - publish_dry_run
+          type: approval
       - publish:
           context: 
             - npm
