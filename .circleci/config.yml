@@ -51,7 +51,7 @@ jobs:
           paths:
             - .
 
-  save-local-cache:
+  save_local_cache:
     docker: 
       - image: cimg/node:14.18
     steps:
@@ -85,7 +85,7 @@ jobs:
       - run_rush:
           command: lint
 
-  verify-change:
+  verify_change:
     docker: 
       - image: cimg/node:14.18
     steps:
