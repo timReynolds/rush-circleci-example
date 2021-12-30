@@ -1,0 +1,112 @@
+version: 2.1
+
+jobs:
+  install:
+    image: cimg/node:14
+    steps:
+      - checkout
+      - restore_cache:
+          name: Restore Rush Global Cache
+          keys:
+            - rush-global-v1-{{ checksum "rush.json" }}-{{ checksum ".node-version" }}
+      - restore_cache:
+          name: Restore Rush Local Cache
+          keys:
+            - rush-local-v1-{{ checksum "common/config/rush/pnpm-lock.yaml" }}
+      - run:
+          name: Check Dependencies
+          command: |
+             node common/scripts/install-run-rush.js check
+      - run:
+          name: Install Dependencies
+          command: |
+            node common/scripts/install-run-rush.js install
+      - save_cache:
+          name: Save Rush Global Cache
+          key: rush-global-v1-{{ checksum "rush.json" }}-{{ checksum ".node-version" }}
+          paths:
+            - "/home/circleci/.rush"
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - .
+
+  save-local-cache:
+    image: cimg/node:14
+    steps:
+      - attach_workspace:
+          at: ./
+      - save_cache:
+          name: Save Rush Local Cache
+          key: rush-local-v1-{{ checksum "common/config/rush/pnpm-lock.yaml" }}
+          paths:
+            - "./common/temp"
+
+  build:
+    image: cimg/node:14
+    steps:
+      - attach_workspace:
+          at: ./
+      - restore_cache:
+          name: Restore Rush Global Cache
+          keys:
+            - rush-global-v1-{{ checksum "rush.json" }}-{{ checksum ".node-version" }}
+      - run:
+          name: Build
+          command: |
+            node common/scripts/install-run-rush.js rebuild
+      - persist_to_workspace:
+          root: ./
+          paths:
+            # shouldn't need to re-persist all the higher layer things, just wastes time
+            - ./packages/
+            - ./common/temp/rush-link.json
+
+  lint:
+    image: cimg/node:14
+    steps:
+      - attach_workspace:
+          at: ./
+      - restore_cache:
+          name: Restore Rush Global Cache
+          keys:
+            - rush-global-v1-{{ checksum "rush.json" }}-{{ checksum ".node-version" }}
+      - run:
+          name: Lint
+          command: |
+            node common/scripts/install-run-rush.js lint
+
+  test:
+    docker:
+      - image: cimg/node:14
+    steps:
+      - attach_workspace:
+          at: ./
+      - restore_cache:
+          name: Restore Rush Global Cache
+          keys:
+            - rush-global-v1-{{ checksum "rush.json" }}-{{ checksum ".node-version" }}
+      - run:
+          name: Test
+          command: |
+            repo-tools/scripts/run-rush-collect-logs.sh rush-logs node common/scripts/install-run-rush.js test-ci
+      
+
+workflows:
+  version: 2
+
+  build-deploy:
+    jobs:
+      - install
+      - build:
+          requires:
+            - install
+      - lint:
+          requires:
+            - install
+      - test:
+          requires:
+            - build
+      - save-local-cache:
+          requires:
+            - install
