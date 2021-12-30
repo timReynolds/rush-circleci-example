@@ -1,9 +1,7 @@
 version: 2.1
 
-jobs:
-  install:
-    docker:
-      - image: cimg/node:14.18
+commands:
+  checkout-and-restore-cache:
     steps:
       - checkout
       - restore_cache:
@@ -14,6 +12,22 @@ jobs:
           name: Restore Rush Local Cache
           keys:
             - rush-local-v1-{{ checksum "common/config/rush/pnpm-lock.yaml" }}
+
+  attach-workspace-with-global-cache:
+    steps:
+      - attach_workspace:
+          at: ./
+      - restore_cache:
+          name: Restore Rush Global Cache
+          keys:
+            - rush-global-v1-{{ checksum "rush.json" }}
+
+jobs:
+  install:
+    docker:
+      - image: cimg/node:14.18
+    steps:
+      - checkout-and-restore-cache
       - run:
           name: Check Dependencies
           command: |
@@ -48,12 +62,7 @@ jobs:
     docker: 
       - image: cimg/node:14.18
     steps:
-      - attach_workspace:
-          at: ./
-      - restore_cache:
-          name: Restore Rush Global Cache
-          keys:
-            - rush-global-v1-{{ checksum "rush.json" }}
+      - attach-workspace-with-global-cache:
       - run:
           name: Build
           command: |
@@ -69,12 +78,7 @@ jobs:
     docker: 
       - image: cimg/node:14.18
     steps:
-      - attach_workspace:
-          at: ./
-      - restore_cache:
-          name: Restore Rush Global Cache
-          keys:
-            - rush-global-v1-{{ checksum "rush.json" }}
+      - attach-workspace-with-global-cache:
       - run:
           name: Lint
           command: |
@@ -84,17 +88,12 @@ jobs:
     docker: 
       - image: cimg/node:14.18
     steps:
-      - attach_workspace:
-          at: ./
-      - restore_cache:
-          name: Restore Rush Global Cache
-          keys:
-            - rush-global-v1-{{ checksum "rush.json" }}
+      - attach-workspace-with-global-cache:
       - run:
           name: Test
           command: |
             node common/scripts/install-run-rush.js test
-            
+
 workflows:
   version: 2
 
