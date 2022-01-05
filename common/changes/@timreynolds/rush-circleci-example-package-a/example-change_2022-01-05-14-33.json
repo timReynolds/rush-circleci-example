@@ -1,0 +1,10 @@
+{
+  "changes": [
+    {
+      "packageName": "@timreynolds/rush-circleci-example-package-a",
+      "comment": "Update messgae",
+      "type": "minor"
+    }
+  ],
+  "packageName": "@timreynolds/rush-circleci-example-package-a"
+}
